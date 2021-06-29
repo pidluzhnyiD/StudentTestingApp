@@ -14,7 +14,7 @@ public interface UserService {
 	 
 	public Boolean checkIfInputDataIsAccurate(String login, String password);
 	
-	public void addNewUser(User user);
+	public Boolean addNewUser(User user);
 
 	Boolean changeUserRights(String login);
 

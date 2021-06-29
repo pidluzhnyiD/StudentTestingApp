@@ -2,20 +2,13 @@ package ua.training.controller.command;
 
 import static ua.training.constants.Constants.APP_NAME;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ua.training.model.entity.Role;
-import ua.training.model.entity.TestResult;
-import ua.training.model.entity.User;
-import ua.training.model.service.TestResultService;
+import ua.training.model.service.ServiceFactory;
 import ua.training.model.service.TestService;
-import ua.training.model.service.impl.TestResultServiceImpl;
-import ua.training.model.service.impl.TestServiceImpl;
 
 public class CreateTestCommand implements Command{
 	@Override
@@ -25,7 +18,8 @@ public class CreateTestCommand implements Command{
         String russianName = request.getParameter("russianName");
         String duration = request.getParameter("duration");
         String difficulty = request.getParameter("difficulty");
-        TestService testService = new TestServiceImpl();
+        
+        TestService testService = ServiceFactory.getInstance().createTestService();
         
         if(!testService.createTest(subject, englishName, russianName, duration, difficulty)){
         	Locale locale;

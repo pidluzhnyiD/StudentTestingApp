@@ -17,7 +17,6 @@ public class Servlet extends HttpServlet {
 	private static final long serialVersionUID = 100L;
 	
 	 public void init(ServletConfig servletConfig) throws ServletException {
-		 //super.init(servletConfig);
 		 servletConfig.getServletContext()
 	                .setAttribute("loggedUsers", new HashSet<String>());
 		 
@@ -53,7 +52,7 @@ public class Servlet extends HttpServlet {
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 		Command command = commands.get(request.getParameter("command"));
-
+		
         String page = command.execute(request, response).replaceAll("/Servlet" , "");
 
         if(page.contains("redirect:")){

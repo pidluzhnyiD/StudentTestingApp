@@ -21,12 +21,11 @@ import ua.training.model.service.TestResultService;
 public class TestResultServiceImpl implements TestResultService{
 	private final int percents = 100;
 	DaoFactory daoFactory = DaoFactory.getInstance();
-	 
+	
 	public List<TestResult> getTestResultsByUserId(int id){
-		try (TestResultDao dao = daoFactory.createTestResultDao()) {
+		try(TestResultDao dao = daoFactory.createTestResultDao()){
 			 return dao.findByUserId(id);
-			
-		}
+		}	
 	}
 	
 	public double calculateResultPercentage(Test test, List<String[]>userAnswers){
@@ -57,18 +56,17 @@ public class TestResultServiceImpl implements TestResultService{
 	}
 	
 	public void createTestResult(Test test, User user, long startTime, double result){
-	
 		java.sql.Time sqlTime = new java.sql.Time(System.currentTimeMillis()-startTime);
 		int offset = sqlTime.getTimezoneOffset();
 		LocalTime localTime = sqlTime.toLocalTime();
 		localTime = localTime.plusMinutes(offset);
-		System.out.println();
+		
 		TestResult newResult = new TestResult(0, user.getId(),test.getId(),test.getEnglishName(),
 				test.getRussianName(),test.getEnglishDifficulty(),test.getRussianDifficulty(), 
 				localTime, LocalDateTime.now(), result);
-		try (TestResultDao dao = daoFactory.createTestResultDao()) {
-			 dao.create(newResult);
-		}
 		
+		try(TestResultDao dao = daoFactory.createTestResultDao()){
+			dao.create(newResult);
+		}	
 	}
 }

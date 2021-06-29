@@ -7,7 +7,6 @@ import ua.training.model.entity.Test;
 import ua.training.model.entity.Subject;
 
 public interface TestService {
-	
 	public List<Test> getAllTests();
 	 
 	public Optional<Test> getTestById(int id);

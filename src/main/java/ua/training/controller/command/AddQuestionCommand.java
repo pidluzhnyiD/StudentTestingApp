@@ -1,23 +1,23 @@
 package ua.training.controller.command;
 
-import static ua.training.constants.Constants.APP_NAME;
 import static ua.training.constants.Constants.DEFAULT_NUMBER_OF_OPTIONS;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ua.training.model.entity.Test;
 import ua.training.model.service.QuestionService;
-import ua.training.model.service.TestService;
-import ua.training.model.service.impl.QuestionServiceImpl;
-import ua.training.model.service.impl.TestServiceImpl;
+import ua.training.model.service.ServiceFactory;
 
 public class AddQuestionCommand implements Command{
+	private static final Logger logger = LogManager.getLogger(AddQuestionCommand.class);
 	@Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 		Test test = (Test) request.getSession().getAttribute("selectedTest");		
@@ -43,13 +43,13 @@ public class AddQuestionCommand implements Command{
 			}
 			
 		}
+		
+		QuestionService questionService = ServiceFactory.getInstance().createQuestionService();
         
-        QuestionService questionService = new QuestionServiceImpl();
         try {
 			questionService.createQuestion(test.getId(), englishDescription, options, answers);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.log(Level.ERROR, e);
 		}
 
         return new TestListingCommand().execute(request, response);

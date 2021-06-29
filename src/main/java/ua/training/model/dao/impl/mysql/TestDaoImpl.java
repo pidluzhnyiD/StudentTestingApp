@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +72,7 @@ public class TestDaoImpl  implements TestDao{
 	}
 
 	@Override
-	public Boolean update(Test test) {
+	public Boolean update(Test test) throws SQLException{
 		try (PreparedStatement st = connection.prepareStatement(UPDATE_TEST_BY_ID)) {
     		st.setInt(1, test.getSubjectId());
     		st.setString(2, test.getEnglishName());
@@ -156,6 +155,7 @@ public class TestDaoImpl  implements TestDao{
 
 	@Override
 	public List<Test> getNTestsSorted(String sortMethod) {
+		System.out.println("Find Page 2");
 		Map<Integer, Test> tests = new LinkedHashMap<>();  
 		try (PreparedStatement st = connection.prepareStatement(sortMethod)) {
 
@@ -188,7 +188,7 @@ public class TestDaoImpl  implements TestDao{
 
 	@Override
 	public int countNumberOfTests() {
-		  try (Statement st = connection.createStatement()) {
+		try (Statement st = connection.createStatement()) {
             ResultSet rs = st.executeQuery(COUNT_ALL_TESTS);
             while (rs.next()) {
                 return rs.getInt("total");

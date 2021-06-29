@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import ua.training.model.entity.User;
 
 import java.io.IOException;
-import java.util.Optional;
 
 public class AuthFilter implements Filter  {
 	@Override

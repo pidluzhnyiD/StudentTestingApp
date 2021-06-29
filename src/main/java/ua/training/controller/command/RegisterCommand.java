@@ -9,8 +9,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import ua.training.model.entity.Role;
 import ua.training.model.entity.User;
+import ua.training.model.service.ServiceFactory;
 import ua.training.model.service.UserService;
-import ua.training.model.service.impl.UserServiceImpl;
 
 public class RegisterCommand  implements Command{
 	@Override
@@ -19,7 +19,7 @@ public class RegisterCommand  implements Command{
         String password = request.getParameter("password");
         String firstName = request.getParameter("firstName");
         
-        UserService userService = new UserServiceImpl(); 
+        UserService userService = ServiceFactory.getInstance().createUserService();
         Optional<User>user = userService.getUserByLogin(userName);
         
         if(user.isPresent()) {
@@ -39,9 +39,7 @@ public class RegisterCommand  implements Command{
         userService.addNewUser(newUser);
         
         HttpSession session = request.getSession(true);
-        session.setMaxInactiveInterval(30);
         session.setAttribute("User", newUser);
-        session.setAttribute("userLoggedIn", true);
         
         CommandUtility.setUserRole(request, Role.STUDENT, userName);
         return new TestListingCommand().execute(request, response);     

@@ -15,15 +15,14 @@ class CommandUtility {
 		session.setAttribute("role", role);
 	}
 	
-	static boolean checkIfUserIsLogged(HttpServletRequest request, String userName){
-		
-		HashSet<String> loggedUsers = (HashSet<String>) request.getSession().getServletContext().getAttribute("loggedUsers");
+	static boolean checkIfUserIsLogged(HttpServletRequest request, String userName){		
+		HashSet<String> loggedUsers = (HashSet<String>) request.getServletContext().getAttribute("loggedUsers");
 
         if(loggedUsers.stream().anyMatch(userName::equals)){
         	return true;
         }
         loggedUsers.add(userName);
-        request.getSession().getServletContext()
+        request.getServletContext()
                 .setAttribute("loggedUsers", loggedUsers);
         return false;
     }

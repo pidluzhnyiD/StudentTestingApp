@@ -1,9 +1,13 @@
 package ua.training.model.service.impl;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import ua.training.model.dao.DaoFactory;
 import ua.training.model.dao.TestDao;
@@ -20,26 +24,27 @@ import static ua.training.constants.SqlConstants.SELECT_N_TESTS_BY_DIFFICULTY_RU
 import static ua.training.constants.SqlConstants.SELECT_N_TESTS_BY_REQUESTS;
 
 public class TestServiceImpl implements TestService{
+	private static final Logger logger = LogManager.getLogger(TestServiceImpl.class);
 	private final int difficultiesCount=3;
 	DaoFactory daoFactory = DaoFactory.getInstance();
-	 
+	
 	@Override
 	public List<Test> getAllTests(){
-		try (TestDao dao = daoFactory.createTestDao()) {
+		try(TestDao dao = daoFactory.createTestDao()){
 			return dao.findAll();
-		}
+		}	
 	}
 	
 	@Override
 	public Optional<Test> getTestById(int id){
-		try (TestDao dao = daoFactory.createTestDao()) {
+		try(TestDao dao = daoFactory.createTestDao()){
 			return dao.findById(id);
-		}
+		}	
 	}
 	
 	@Override
 	public List<Test> getAllTestsBySubject(Subject subject){
-		try (TestDao dao = daoFactory.createTestDao()) {
+		try(TestDao dao = daoFactory.createTestDao()){
 			return dao.findAllTestsBySubject(subject);
 		}
 	}
@@ -56,7 +61,7 @@ public class TestServiceImpl implements TestService{
 		Test test = new Test(0, subjectId, englishName, russianName, durationTime, 
 				englishDifficulty, russianDifficulty, 0, Collections.emptyList());
 		
-		try (TestDao dao = daoFactory.createTestDao()) {
+		try(TestDao dao = daoFactory.createTestDao()){
 			return dao.create(test);
 		}
 	}
@@ -73,8 +78,11 @@ public class TestServiceImpl implements TestService{
 		Test test = new Test(id, subjectId, englishName, russianName, durationTime, 
 				englishDifficulty, russianDifficulty, 0, Collections.emptyList());
 		
-		try (TestDao dao = daoFactory.createTestDao()) {
+		try (TestDao dao = daoFactory.createTestDao()){
 			return dao.update(test);
+		} catch (SQLException e) {
+			logger.log(Level.ERROR, e);
+			return false;
 		}
 	}
 	
@@ -83,33 +91,36 @@ public class TestServiceImpl implements TestService{
 		test.setNumberOfRequests(test.getNumberOfRequests()+1);
 		try (TestDao dao = daoFactory.createTestDao()) {
 			dao.update(test);
+		} catch (SQLException e) {
+			logger.log(Level.ERROR, e);
 		}
 	}
 	
 	@Override
 	public Boolean deleteTest(String testId){
-		try (TestDao dao = daoFactory.createTestDao()) {
+		try(TestDao dao = daoFactory.createTestDao()){
 			return dao.delete(Integer.parseInt(testId));	
 		}
 	}
 	
 	@Override
 	public List<Test> findTestsByPageAndSubjectId(int subjectId, int offset, int numberOfTests) {
-		try (TestDao dao = daoFactory.createTestDao()) {
-			return dao.fintNTestsBySubjectId(subjectId, offset, numberOfTests);
-		}       
+		try(TestDao dao = daoFactory.createTestDao()){
+			return dao.fintNTestsBySubjectId(subjectId, offset, numberOfTests);    	
+		}
 	}
 	
 	@Override
 	public List<Test> findTestsByPageSorted(int offset, int numberOfTests, Boolean descSort, String sortMethod) {
-		try (TestDao dao = daoFactory.createTestDao()) {
-			String query = getQuery(sortMethod);
-			if(descSort) {
-				query+=" DESC";
-			}
-			query+=" Limit " + offset +", "+ numberOfTests;
-			return dao.getNTestsSorted(query);
-		}       
+		System.out.println("Find Page 1");
+		String query = getQuery(sortMethod);
+		if(descSort) {
+			query+=" DESC";
+		}
+		query+=" Limit " + offset +", "+ numberOfTests;
+		try(TestDao dao = daoFactory.createTestDao()){
+			return dao.getNTestsSorted(query);   
+		}	   
 	}
 	
 	private String getQuery(String sortMethod) {
@@ -131,15 +142,15 @@ public class TestServiceImpl implements TestService{
 	
 	@Override
 	public int getTestsCount() {
-		try (TestDao dao = daoFactory.createTestDao()) {
-			return dao.countNumberOfTests();
-		}       
+		try(TestDao dao = daoFactory.createTestDao()){
+			return dao.countNumberOfTests(); 
+		}	
 	}
 
 	@Override
 	public int getTestsCountBySubjectId(int subjectId) {
-		try (TestDao dao = daoFactory.createTestDao()) {
-			return dao.countTestsBySubjectId(subjectId);
-		}       
+		try(TestDao dao = daoFactory.createTestDao()){
+			return dao.countTestsBySubjectId(subjectId);    
+		}	  
 	}
 }

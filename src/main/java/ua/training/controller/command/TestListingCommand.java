@@ -1,20 +1,15 @@
 package ua.training.controller.command;
 
 import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.ResourceBundle;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import ua.training.model.entity.Subject;
 import ua.training.model.entity.Test;
 import ua.training.model.entity.User;
+import ua.training.model.service.ServiceFactory;
 import ua.training.model.service.SubjectService;
 import ua.training.model.service.TestService;
-import ua.training.model.service.impl.SubjectServiceImpl;
-import ua.training.model.service.impl.TestServiceImpl;
 
 import static ua.training.constants.Constants.APP_NAME;
 import static ua.training.constants.Constants.INITIAL_PAGE_NUMBER;
@@ -25,8 +20,9 @@ import static ua.training.constants.SqlConstants.SELECT_N_TESTS_BY_SUBJECT;
 public class TestListingCommand implements Command{
 	@Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-		TestService testService = new TestServiceImpl();
-		SubjectService subjectService = new SubjectServiceImpl();
+		TestService testService = ServiceFactory.getInstance().createTestService();
+		SubjectService subjectService = ServiceFactory.getInstance().createSubjectService();
+		
 		List<Subject> subjects = subjectService.getAllSubjects();
 		List<Test> tests;
 		
@@ -53,7 +49,7 @@ public class TestListingCommand implements Command{
 			request.getSession().setAttribute("lastSelectedSubject", selectedSubject);
 			
 			noOfRecords = testService.getTestsCountBySubjectId(selectedSubject);
-			
+						
 			tests = testService.findTestsByPageAndSubjectId(selectedSubject,(page-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE);
 		
 		}
@@ -67,21 +63,23 @@ public class TestListingCommand implements Command{
 			
 			Boolean descSort = orderBy.contains("desc")?true:false;
 
-			orderBy = descSort?orderBy.replaceAll("_desc", ""):orderBy;
-			
+			orderBy = orderBy.replaceAll("_desc", "");
+					
 			if(!orderBy.contains("requests")) {
+				System.out.println(orderBy);
+				orderBy+="_";
 				orderBy+=request.getParameter("language")!=null?request.getParameter("language"):DEFAULT_LANGUAGE;
+				System.out.println(orderBy);
 			}
 			
 			request.getSession().setAttribute("lastSort", "byColumnName");
-
-			System.out.println("OrderBy "+orderBy);
 			
 			tests = testService.findTestsByPageSorted((page-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE, descSort,  orderBy);
 		}
 		else {
 			tests = testService.findTestsByPageSorted((page-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE, false, SELECT_N_TESTS_BY_SUBJECT);	
 			request.getSession().setAttribute("selectedSubject", request.getParameter("selectedSubject"));
+			request.getSession().setAttribute("lastSort", "");
 		}
 			
         int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / RECORDS_PER_PAGE);

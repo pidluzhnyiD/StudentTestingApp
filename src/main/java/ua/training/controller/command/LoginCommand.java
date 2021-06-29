@@ -2,8 +2,8 @@ package ua.training.controller.command;
 
 import ua.training.model.entity.Role;
 import ua.training.model.entity.User;
+import ua.training.model.service.ServiceFactory;
 import ua.training.model.service.UserService;
-import ua.training.model.service.impl.UserServiceImpl;
 
 import java.util.Locale;
 import java.util.Optional;
@@ -20,7 +20,7 @@ public class LoginCommand implements Command{
         String userName = request.getParameter("login");
         String password = request.getParameter("password");
         
-        UserService userService = new UserServiceImpl(); 
+        UserService userService = ServiceFactory.getInstance().createUserService();
         Optional<User>user = userService.getUserByLogin(userName);
         
         if(!user.isPresent()||!userService.checkIfInputDataIsAccurate(userName, password)) {
@@ -43,9 +43,7 @@ public class LoginCommand implements Command{
         String role = user.get().getRole().toString().toLowerCase();
         
         HttpSession session = request.getSession(true);
-        session.setMaxInactiveInterval(30*60);
         session.setAttribute("User", user.get());
-        session.setAttribute("userLoggedIn", true);
         
         if (role.equals("admin")){
             CommandUtility.setUserRole(request, Role.ADMIN, userName);
@@ -58,4 +56,5 @@ public class LoginCommand implements Command{
             return "redirect:index.jsp";
         }
     }	
+	
 }

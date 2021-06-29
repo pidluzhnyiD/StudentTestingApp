@@ -166,7 +166,7 @@ public class QuestionDaoImpl implements QuestionDao{
 	
 
 	@Override
-	public Boolean update(Question question) {
+	public Boolean update(Question question) throws SQLException{
 		try {
 			return update(question, DEFAULT_LANGUAGE);
 		} catch (SQLException e) {

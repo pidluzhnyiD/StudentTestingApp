@@ -1,10 +1,8 @@
 package ua.training.controller.command;
 
-import ua.training.model.entity.Role;
 import ua.training.model.entity.User;
 
 import java.util.HashSet;
-import java.util.Optional;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,9 +11,7 @@ import static ua.training.constants.Constants.APP_NAME;
 
 public class LogOutCommand implements Command{
 	@Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
-        CommandUtility.setUserRole(request, Role.GUEST, "Guest");
-       
+    public String execute(HttpServletRequest request, HttpServletResponse response) {       
         HashSet<String> loggedUsers = (HashSet<String>) request.getSession()
         		.getServletContext().getAttribute("loggedUsers");
 

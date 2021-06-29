@@ -60,7 +60,8 @@ public class Subject {
 
 	@Override
 	public String toString() {
-		return "Subject #" + id + ", English Name=" + englishName+", Russian Name=" + russianName +", Test Count=" + testCount;
+		return "Subject #" + id + ", English Name=" + englishName+", "
+				+ "Russian Name=" + russianName +", Test Count=" + testCount;
 	}
 	
 	public static class Builder {
