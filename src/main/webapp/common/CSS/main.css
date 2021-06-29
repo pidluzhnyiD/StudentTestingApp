@@ -1,0 +1,108 @@
+@charset "UTF-8";
+		body{
+		  margin:0;
+		  padding:0;
+		  background-color:#eaeaea;
+		}
+		header {
+		  overflow: hidden;
+		  background-color: #00BFB2;
+		  margin:0;
+		  padding:0;
+		}
+		
+		header button {
+		  border:none;
+		  text-decoration:none;
+		  background-color: #00BFB2;
+		  float: left;
+		  color: black;
+		  text-align: center;
+		  padding: 12px;
+		  text-decoration: none;
+		  font-size: 20px;
+		  line-height: 25px;
+		  border-radius: 4px;
+		  transition: background 0.5s linear 0.1s , color 0.5s linear 0s;
+		}
+		
+		header button.logo {
+		  font-size: 24px;
+		}
+
+		header button:hover {
+		  background-color: #05a398;
+		  color: black;
+		}
+		
+		.header-right {
+		  float: right;
+		}
+		
+		.sign-in-box{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+    		margin: 0 auto;
+    		margin-top:100px;
+			width:800px;
+			height:500px;
+			background-color:white;	
+			border-radius: 50px;
+		}
+		
+		.sign-in-form{
+			width:100%;
+			padding: 0;
+			text-align: center;
+    		vertical-align: middle;
+		}
+		
+		#russianButton{
+			display:none;
+		}
+		
+		h1{
+			font-size: 50px;
+		}
+		
+		h3{
+			font-size: 30px;
+		}
+		
+		input{
+			margin:10px;
+		}
+		
+		input[type=text], select {
+		  width: 50%;
+		  padding: 12px 20px;
+		  margin: 8px 0;
+		  display: inline-block;
+		  border: 1px solid #ccc;
+		  border-radius: 4px;
+		  box-sizing: border-box;
+		}
+		
+		input[type=submit] {
+		  width: 50%;
+		  background-color: #00BFB2;
+		  color: white;
+		  padding: 14px 20px;
+		  margin: 8px 0;
+		  border: none;
+		  border-radius: 4px;
+		  cursor: pointer;
+		  font-size:16px;
+		}
+		
+		@media screen and (max-width: 500px) {
+		  header a {
+		    float: none;
+		    display: block;
+		    text-align: left;
+		  }
+		  .header-right {
+		    float: none;
+		  }
+		}

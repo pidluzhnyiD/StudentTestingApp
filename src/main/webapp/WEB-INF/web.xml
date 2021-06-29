@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>StudentTestingApp</display-name>
+  
+  <servlet>
+   <servlet-name>Servlet</servlet-name>
+   <servlet-class>ua.training.controller.Servlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+   <servlet-name>Servlet</servlet-name>
+   <url-pattern>/Servlet/*</url-pattern>
+  </servlet-mapping>
+  
+  <filter>
+    <filter-name>EncodingFilter</filter-name>
+    <filter-class>ua.training.controller.filters.EncodingFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>EncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter>
+    <filter-name>AuthFilter</filter-name>
+    <filter-class>ua.training.controller.filters.AuthFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AuthFilter</filter-name>
+    <url-pattern>/account/*</url-pattern>
+  </filter-mapping>
+  
+  
+   <listener>
+    <listener-class>
+      ua.training.controller.listener.SessionListener
+    </listener-class>
+  </listener>
+
+ 
+  <session-config>
+	<session-timeout>30</session-timeout>
+  </session-config>
+  
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>
