@@ -14,6 +14,8 @@ import ua.training.model.entity.Role;
 import ua.training.model.entity.User;
 import ua.training.model.service.UserService;
 
+import static ua.training.constants.Constants.*;
+
 public class UserServiceImpl implements UserService{
 	private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 	DaoFactory daoFactory = DaoFactory.getInstance();
@@ -58,7 +60,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public Boolean changeUserRights(String login) {
 		User user = getUserByLogin(login).get();
-		if(("BLOCKED").equals(user.getRole().toString())) {
+		if((BLOCKED).equals(user.getRole().toString())) {
 			user.setRole(Role.STUDENT);
 		}
 		else {

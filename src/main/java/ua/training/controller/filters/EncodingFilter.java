@@ -9,6 +9,8 @@ import jakarta.servlet.ServletResponse;
 
 import java.io.IOException;
 
+import static ua.training.constants.Constants.*;
+
 public class EncodingFilter implements Filter{
 	 @Override
 	 public void init(FilterConfig filterConfig) throws ServletException {
@@ -17,9 +19,9 @@ public class EncodingFilter implements Filter{
 	 
 	 @Override
 	 public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-		 servletResponse.setContentType("text/html");
-	     servletResponse.setCharacterEncoding("UTF-8");
-	     servletRequest.setCharacterEncoding("UTF-8");
+		 servletResponse.setContentType(TEXT_HTML);
+	     servletResponse.setCharacterEncoding(ENCODING);
+	     servletRequest.setCharacterEncoding(ENCODING);
 	     filterChain.doFilter(servletRequest,servletResponse);
 	 }  
 	 

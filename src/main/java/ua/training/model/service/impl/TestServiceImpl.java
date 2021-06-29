@@ -16,16 +16,11 @@ import ua.training.model.entity.Test;
 import ua.training.model.entity.TestDifficulty;
 import ua.training.model.service.TestService;
 
-import static ua.training.constants.SqlConstants.SELECT_ALL_TESTS_BY_SUBJECT;
-import static ua.training.constants.SqlConstants.SELECT_N_TESTS_BY_NAME_EN;
-import static ua.training.constants.SqlConstants.SELECT_N_TESTS_BY_NAME_RU;
-import static ua.training.constants.SqlConstants.SELECT_N_TESTS_BY_DIFFICULTY_EN;
-import static ua.training.constants.SqlConstants.SELECT_N_TESTS_BY_DIFFICULTY_RU;
-import static ua.training.constants.SqlConstants.SELECT_N_TESTS_BY_REQUESTS;
+import static ua.training.constants.SqlConstants.*;
+import static ua.training.constants.Constants.*;
 
 public class TestServiceImpl implements TestService{
 	private static final Logger logger = LogManager.getLogger(TestServiceImpl.class);
-	private final int difficultiesCount=3;
 	DaoFactory daoFactory = DaoFactory.getInstance();
 	
 	@Override
@@ -49,37 +44,29 @@ public class TestServiceImpl implements TestService{
 		}
 	}
 	
-	@Override
-	public Boolean createTest(String subject,String englishName, String russianName, String durationString, String difficulty){
+	private Test newTest(int id, String subject,String englishName, String russianName, String durationString, String difficulty) {
 		int subjectId = Integer.parseInt(subject);
 		int durationTime = Integer.parseInt(durationString);
 		int difficultyIdEnglish = Integer.parseInt(difficulty);
-		int difficultyIdRussian = difficultyIdEnglish+difficultiesCount;
+		int difficultyIdRussian = difficultyIdEnglish+DIFFICULTIES_COUNT;
 		TestDifficulty englishDifficulty = TestDifficulty.values()[difficultyIdEnglish];
 		TestDifficulty russianDifficulty = TestDifficulty.values()[difficultyIdRussian];
 		
-		Test test = new Test(0, subjectId, englishName, russianName, durationTime, 
+		return new Test(id, subjectId, englishName, russianName, durationTime, 
 				englishDifficulty, russianDifficulty, 0, Collections.emptyList());
-		
+	}
+	
+	@Override
+	public Boolean createTest(String subject,String englishName, String russianName, String durationString, String difficulty){		
 		try(TestDao dao = daoFactory.createTestDao()){
-			return dao.create(test);
+			return dao.create(newTest(0, subject, englishName, russianName, durationString, difficulty));
 		}
 	}
 	
 	@Override
-	public Boolean updateTest(int id, String subject,String englishName, String russianName, String durationString, String difficulty){
-		int subjectId = Integer.parseInt(subject);
-		int durationTime = Integer.parseInt(durationString);
-		int difficultyIdEnglish = Integer.parseInt(difficulty);
-		int difficultyIdRussian = difficultyIdEnglish+difficultiesCount;
-		TestDifficulty englishDifficulty = TestDifficulty.values()[difficultyIdEnglish];
-		TestDifficulty russianDifficulty = TestDifficulty.values()[difficultyIdRussian];
-		
-		Test test = new Test(id, subjectId, englishName, russianName, durationTime, 
-				englishDifficulty, russianDifficulty, 0, Collections.emptyList());
-		
+	public Boolean updateTest(int id, String subject,String englishName, String russianName, String durationString, String difficulty){		
 		try (TestDao dao = daoFactory.createTestDao()){
-			return dao.update(test);
+			return dao.update(newTest(id, subject, englishName, russianName, durationString, difficulty));
 		} catch (SQLException e) {
 			logger.log(Level.ERROR, e);
 			return false;
@@ -112,7 +99,6 @@ public class TestServiceImpl implements TestService{
 	
 	@Override
 	public List<Test> findTestsByPageSorted(int offset, int numberOfTests, Boolean descSort, String sortMethod) {
-		System.out.println("Find Page 1");
 		String query = getQuery(sortMethod);
 		if(descSort) {
 			query+=" DESC";
@@ -125,15 +111,15 @@ public class TestServiceImpl implements TestService{
 	
 	private String getQuery(String sortMethod) {
 		switch(sortMethod) {
-			case "name_en":
+			case NAME_EN:
 				return SELECT_N_TESTS_BY_NAME_EN;
-			case "name_ru":
+			case NAME_RU:
 				return SELECT_N_TESTS_BY_NAME_RU;
-			case "difficulty_en":
+			case DIFFICULTY_EN:
 				return SELECT_N_TESTS_BY_DIFFICULTY_EN;
-			case "difficulty_ru":
+			case DIFFICULTY_RU:
 				return SELECT_N_TESTS_BY_DIFFICULTY_RU;
-			case "number_of_requests":
+			case NUMBER_OF_REQUESTS:
 				return SELECT_N_TESTS_BY_REQUESTS;
 			default:
 				return  SELECT_ALL_TESTS_BY_SUBJECT;

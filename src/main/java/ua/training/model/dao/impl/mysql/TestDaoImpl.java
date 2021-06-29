@@ -155,7 +155,6 @@ public class TestDaoImpl  implements TestDao{
 
 	@Override
 	public List<Test> getNTestsSorted(String sortMethod) {
-		System.out.println("Find Page 2");
 		Map<Integer, Test> tests = new LinkedHashMap<>();  
 		try (PreparedStatement st = connection.prepareStatement(sortMethod)) {
 

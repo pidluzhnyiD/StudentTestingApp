@@ -7,15 +7,17 @@ import java.util.Map;
 import ua.training.model.entity.Role;
 import ua.training.model.entity.User;
 
+import static ua.training.constants.Constants.*;
+
 public class UserMapper implements ObjectMapper<User>{
     @Override
     public User extractFromResultSet(ResultSet rs) throws SQLException {
         User user = new User();
-        user.setId(rs.getInt("id"));
-        user.setName(rs.getString("name"));
-        user.setLogin(rs.getString("login"));
-        user.setPassword(rs.getString("password"));
-        String role = rs.getString("role");
+        user.setId(rs.getInt(ID));
+        user.setName(rs.getString(NAME));
+        user.setLogin(rs.getString(LOGIN));
+        user.setPassword(rs.getString(PASSWORD));
+        String role = rs.getString(ROLE);
         user.setRole(Role.valueOf(role.toUpperCase()));
         return user;
     }

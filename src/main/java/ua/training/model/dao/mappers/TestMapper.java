@@ -7,20 +7,22 @@ import java.util.Map;
 import ua.training.model.entity.Test;
 import ua.training.model.entity.TestDifficulty;
 
+import static ua.training.constants.Constants.*;
+
 public class TestMapper implements ObjectMapper<Test>{
 	@Override
     public Test extractFromResultSet(ResultSet rs) throws SQLException {
         Test test = new Test();
-        test.setId(rs.getInt("id"));
-        test.setSubjectId(rs.getInt("subject_id"));
-        test.setEnglishName(rs.getString("name_en"));
-        test.setRussianName(rs.getString("name_ru"));
-        test.setTestDuration(rs.getInt("duration"));
-        String tdEN = rs.getString("difficulty_en");
+        test.setId(rs.getInt(ID));
+        test.setSubjectId(rs.getInt(SUBJECT_ID));
+        test.setEnglishName(rs.getString(NAME_EN));
+        test.setRussianName(rs.getString(NAME_RU));
+        test.setTestDuration(rs.getInt(DURATION));
+        String tdEN = rs.getString(DIFFICULTY_EN);
         test.setEnglishDifficulty(TestDifficulty.valueOf(tdEN.toUpperCase()));
-        String tdRU = rs.getString("difficulty_ru");
+        String tdRU = rs.getString(DIFFICULTY_RU);
         test.setRussianDifficulty(TestDifficulty.valueOf(tdRU.toUpperCase()));
-        test.setNumberOfRequests(rs.getInt("number_of_requests"));        
+        test.setNumberOfRequests(rs.getInt(NUMBER_OF_REQUESTS));        
         return test;
     }
 

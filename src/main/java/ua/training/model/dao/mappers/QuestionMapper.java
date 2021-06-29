@@ -8,15 +8,15 @@ import java.util.Map;
 
 import ua.training.model.entity.Question;
 
-import static ua.training.constants.Constants.DEFAULT_NUMBER_OF_OPTIONS;
+import static ua.training.constants.Constants.*;
 
 public class QuestionMapper implements ObjectMapper<Question>{
 	@Override
     public Question extractFromResultSet(ResultSet rs) throws SQLException {
         Question question = new Question();
-        question.setId(rs.getInt("id"));
-        question.setTestId(rs.getInt("test_id"));
-        question.setDescription(rs.getString("description"));
+        question.setId(rs.getInt(ID));
+        question.setTestId(rs.getInt(TEST_ID));
+        question.setDescription(rs.getString(DESCRIPTION));
         question.setOptions(getOptions(rs, DEFAULT_NUMBER_OF_OPTIONS));
         question.setCorrectAnswers(getAnswers(rs, DEFAULT_NUMBER_OF_OPTIONS));
         return question;
@@ -25,7 +25,7 @@ public class QuestionMapper implements ObjectMapper<Question>{
 	private List<String>getOptions(ResultSet rs, int N) throws SQLException{
 		ArrayList<String>options = new ArrayList<>();
 		for(int i=1;i<=N;i++) {
-			options.add(rs.getString("option_"+i));
+			options.add(rs.getString(OPTION_+i));
 		}
 		return options;
 	}
@@ -33,7 +33,7 @@ public class QuestionMapper implements ObjectMapper<Question>{
 	private List<Boolean>getAnswers(ResultSet rs, int N) throws SQLException{
 		ArrayList<Boolean>answers = new ArrayList<>();
 		for(int i=1;i<=N;i++) {
-			answers.add(rs.getBoolean("answer_"+i));
+			answers.add(rs.getBoolean(ANSWER_+i));
 		}
 		return answers;
 	}

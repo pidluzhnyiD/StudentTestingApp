@@ -7,22 +7,24 @@ import java.util.Map;
 import ua.training.model.entity.TestDifficulty;
 import ua.training.model.entity.TestResult;
 
+import static ua.training.constants.Constants.*;
+
 public class TestResultMapper  implements ObjectMapper<TestResult>{
 	@Override
     public TestResult extractFromResultSet(ResultSet rs) throws SQLException {
 		TestResult testResult = new TestResult();
-		testResult.setId(rs.getInt("id"));
-		testResult.setUserId(rs.getInt("user_id"));
-		testResult.setTestId(rs.getInt("test_id"));
-		testResult.setEnglishName(rs.getString("name_en"));
-		testResult.setRussianName(rs.getString("name_ru"));
-		String tdEN = rs.getString("difficulty_en");
+		testResult.setId(rs.getInt(ID));
+		testResult.setUserId(rs.getInt(USER_ID));
+		testResult.setTestId(rs.getInt(TEST_ID));
+		testResult.setEnglishName(rs.getString(NAME_EN));
+		testResult.setRussianName(rs.getString(NAME_RU));
+		String tdEN = rs.getString(DIFFICULTY_EN);
 		testResult.setEnglishDifficulty(TestDifficulty.valueOf(tdEN.toUpperCase()));
-        String tdRU = rs.getString("difficulty_ru");
+        String tdRU = rs.getString(DIFFICULTY_RU);
         testResult.setRussianDifficulty(TestDifficulty.valueOf(tdRU.toUpperCase()));
-        testResult.setCompletionTime(rs.getTime("completion_time"));
-        testResult.setCompletionDate(rs.getTimestamp("completion_date"));
-        testResult.setResult(rs.getDouble("result"));
+        testResult.setCompletionTime(rs.getTime(COMPLETION_TIME));
+        testResult.setCompletionDate(rs.getTimestamp(COMPLETION_DATE));
+        testResult.setResult(rs.getDouble(RESULT));
         return testResult;
     }
 

@@ -6,11 +6,14 @@ import java.util.HashSet;
 import java.util.Map;
 
 import ua.training.controller.command.*;
+
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import static ua.training.constants.Constants.*;
 
 public class Servlet extends HttpServlet {
 	private Map<String, Command> commands = new HashMap<>();
@@ -18,25 +21,25 @@ public class Servlet extends HttpServlet {
 	
 	 public void init(ServletConfig servletConfig) throws ServletException {
 		 servletConfig.getServletContext()
-	                .setAttribute("loggedUsers", new HashSet<String>());
+	                .setAttribute(LOGGED_USERS, new HashSet<String>());
 		 
-		 commands.put("logout", new LogOutCommand());
-	     commands.put("login", new LoginCommand());
-	     commands.put("register", new RegisterCommand());
-	     commands.put("testListing", new TestListingCommand());
-	     commands.put("changeLanguage", new ChangeLanguageCommand());
-	     commands.put("startTest", new StartTestCommand());
-	     commands.put("calculateResult", new CalculateResultCommand());
-	     commands.put("resultsInfo", new ResultsInfoCommand());
-	     commands.put("userListing", new UserListingCommand());
-	     commands.put("createTest", new CreateTestCommand());
-	     commands.put("studentAuthorization", new StudentAuthorizationCommand());
-	     commands.put("deleteUser", new DeleteUserCommand());
-	     commands.put("deleteTest", new DeleteTestCommand());
-	     commands.put("fillTestData", new FillTestDataCommand());
-	     commands.put("updateTest", new UpdateTestCommand());
-	     commands.put("addQuestion", new AddQuestionCommand());
-	     commands.put("fillQuestionData", new FillQuestionDataCommand());
+		 commands.put(LOGOUT, new LogOutCommand());
+	     commands.put(LOGIN, new LoginCommand());
+	     commands.put(REGISTER, new RegisterCommand());
+	     commands.put(TEST_LISTING, new TestListingCommand());
+	     commands.put(CHANGE_LANGUAGE, new ChangeLanguageCommand());
+	     commands.put(START_TEST, new StartTestCommand());
+	     commands.put(CALCULATE_RESULT, new CalculateResultCommand());
+	     commands.put(RESULTS_INFO, new ResultsInfoCommand());
+	     commands.put(USER_LISTING, new UserListingCommand());
+	     commands.put(CREATE_TEST, new CreateTestCommand());
+	     commands.put(STUDENT_AUTHORIZATION, new StudentAuthorizationCommand());
+	     commands.put(DELETE_USER, new DeleteUserCommand());
+	     commands.put(DELETE_TEST, new DeleteTestCommand());
+	     commands.put(FILL_TEST_DATA, new FillTestDataCommand());
+	     commands.put(UPDATE_TEST, new UpdateTestCommand());
+	     commands.put(ADD_QUESTION, new AddQuestionCommand());
+	     commands.put(FILL_QUESTION_DATA, new FillQuestionDataCommand());
 	}
 
 	
@@ -51,12 +54,12 @@ public class Servlet extends HttpServlet {
 	
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-		Command command = commands.get(request.getParameter("command"));
+		Command command = commands.get(request.getParameter(COMMAND));
 		
-        String page = command.execute(request, response).replaceAll("/Servlet" , "");
+        String page = command.execute(request, response).replaceAll(SERVLET_PATH , "");
 
-        if(page.contains("redirect:")){
-            response.sendRedirect(page.replace("redirect:", ""));
+        if(page.contains(REDIRECT)){
+            response.sendRedirect(page.replace(REDIRECT, ""));
         }else {
             request.getRequestDispatcher(page).forward(request, response);
         }
