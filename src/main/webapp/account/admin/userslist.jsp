@@ -70,7 +70,6 @@
 	               <th><fmt:message key = "user.authorization" bundle ="${lang}"/></th>
 	               <th><fmt:message key = "user.delete" bundle ="${lang}"/></th>
 	          </tr>
-	
 	         <c:forEach items="${students}" var="student">
 	               	      
 	                <tr>         		   	
