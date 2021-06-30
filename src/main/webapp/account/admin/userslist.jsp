@@ -51,14 +51,10 @@
 		    	</button>
 		    	<input type="hidden" name="command" value="testListing"/>
 		    </div>
-		</form>			
+		</form>				
 		<form action="/StudentTestingApp/Servlet" method="post">
 	  		<div class="header-right">
-
-		    	<button type="submit" name="createTest" value="createTest">
-		    		<fmt:message key = "test.create" bundle ="${lang}"/>
-		    	</button>
-		    	<input type="hidden" name="command" value="createTest"/>
+				<a class="headerButton" href="createtest.jsp"><fmt:message key = "test.create" bundle ="${lang}"/></a>
 		    </div>
 		</form>		
   		 		 
