@@ -10,6 +10,7 @@ public class Constants {
 	public static final int RECORDS_PER_PAGE = 2;
 	public static final int DIFFICULTIES_COUNT = 3;
 	public static final double PERCENTAGE = 100.0;
+	public static final String FIRST_ELEMENT = "0";
 	public static final String LOGGED_USERS = "loggedUsers";
 	
 	public static final String ENCODING = "UTF-8";
@@ -42,6 +43,12 @@ public class Constants {
 	public static final String ADD_QUESTION_PATH = "account/admin/addquestion.jsp";
 	public static final String UPDATE_TEST_PATH = "account/admin/updatetest.jsp";
 	public static final String STUDENT_INFO_PATH = "account/student/info.jsp";
+	public static final String TEST_PATH = "account/student/test.jsp";
+	public static final String ADMIN_PAGE_PATH = "/account/admin/adminbasis.jsp";
+	public static final String STUDENT_PAGE_PATH = "/account/student/studentbasis.jsp";
+	
+	public static final String ADMIN = "admin";
+	public static final String STUDENT = "student";
 	
 	
 	public static final String ID = "id";
@@ -74,5 +81,13 @@ public class Constants {
 	public static final String SELECTED_TEST = "selectedTest";
 	public static final String SELECTED_SUBJECT = "selectedSubject";
 	public static final String ERROR_MESSAGE = "errorMessage";
-	
+	public static final String PAGE = "page";
+	public static final String LAST_SORT = "lastSort";
+	public static final String LAST_SELECTED_SORT = "lastSelectedSort";
+	public static final String LAST_SELECTED_SUBJECT = "lastSelectedSubject";
+	public static final String ORDER_BY = "orderBy";
+	public static final String LAST_ORDER_BY = "lastOrderBy";
+	public static final String SORT_BY_SUBJECT = "bySubject";
+	public static final String SORT_BY_COLUMN = "byColumnName";
 }
+
