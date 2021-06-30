@@ -70,4 +70,5 @@ public class TestResultServiceImpl implements TestResultService{
 			dao.create(newResult);
 		}	
 	}
+	
 }
