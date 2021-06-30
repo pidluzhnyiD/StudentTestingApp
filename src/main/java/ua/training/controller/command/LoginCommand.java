@@ -40,15 +40,15 @@ public class LoginCommand implements Command{
         HttpSession session = request.getSession(true);
         session.setAttribute(USER, user.get());
         
-        if (role.equals("admin")){
+        if (role.equals(ADMIN)){
             CommandUtility.setUserRole(request, Role.ADMIN, userName);
             return new TestListingCommand().execute(request, response);
-        } else if(role.equals("student")) {
+        } else if(role.equals(STUDENT)) {
             CommandUtility.setUserRole(request, Role.STUDENT, userName);
             return new TestListingCommand().execute(request, response);
         } else {
             CommandUtility.setUserRole(request, Role.GUEST, userName);
-            return "redirect:index.jsp";
+            return REDIRECT+"index.jsp";
         }
     }	
 	

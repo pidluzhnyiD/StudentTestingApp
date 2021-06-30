@@ -11,11 +11,8 @@ import ua.training.model.service.ServiceFactory;
 import ua.training.model.service.SubjectService;
 import ua.training.model.service.TestService;
 
-import static ua.training.constants.Constants.APP_NAME;
-import static ua.training.constants.Constants.INITIAL_PAGE_NUMBER;
-import static ua.training.constants.Constants.RECORDS_PER_PAGE;
-import static ua.training.constants.Constants.DEFAULT_LANGUAGE;
-import static ua.training.constants.SqlConstants.SELECT_N_TESTS_BY_SUBJECT;
+import static ua.training.constants.Constants.*;
+import static ua.training.constants.SqlConstants.*;
 
 public class TestListingCommand implements Command{
 	@Override
@@ -26,43 +23,43 @@ public class TestListingCommand implements Command{
 		List<Subject> subjects = subjectService.getAllSubjects();
 		List<Test> tests;
 		
-        int page = request.getParameter("page") != null?
-        		Integer.parseInt(request.getParameter("page")):INITIAL_PAGE_NUMBER;
+        int page = request.getParameter(PAGE) != null?
+        		Integer.parseInt(request.getParameter(PAGE)):INITIAL_PAGE_NUMBER;
         
         int noOfRecords = testService.getTestsCount();
         
         String lastSort = null;
         
-        String selectedSubject = request.getParameter("selectedSubject");
-        String orderBy = request.getParameter("orderBy");
-        String language = request.getParameter("language");
+        String selectedSubject = request.getParameter(SELECTED_SUBJECT);
+        String orderBy = request.getParameter(ORDER_BY);
+        String language = request.getParameter(LANGUAGE);
         
         if(selectedSubject==null&&orderBy==null) {
-        	lastSort = (String) request.getSession().getAttribute("lastSort");
+        	lastSort = (String) request.getSession().getAttribute(LAST_SORT);
         }
         
-		if(selectedSubject!=null&&!"0".equals(selectedSubject)
-				||"bySubject".equals(lastSort)) {
+		if(selectedSubject!=null&&!FIRST_ELEMENT.equals(selectedSubject)
+				||SORT_BY_SUBJECT.equals(lastSort)) {
 			
 			int subjectId = selectedSubject!=null?
 					Integer.parseInt(selectedSubject):
-						(int) request.getSession().getAttribute("lastSelectedSubject");
+						(int) request.getSession().getAttribute(LAST_SELECTED_SORT);
 			
-			request.getSession().setAttribute("selectedSubject", selectedSubject);
-			request.getSession().setAttribute("lastSort", "bySubject");
-			request.getSession().setAttribute("lastSelectedSubject", selectedSubject);
+			request.getSession().setAttribute(SELECTED_SUBJECT, selectedSubject);
+			request.getSession().setAttribute(LAST_SORT, SORT_BY_SUBJECT);
+			request.getSession().setAttribute(LAST_SELECTED_SUBJECT, selectedSubject);
 			
 			noOfRecords = testService.getTestsCountBySubjectId(subjectId);
 						
 			tests = testService.findTestsByPageAndSubjectId(subjectId,(page-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE);
 		
 		}
-		else if(orderBy!=null || "byColumnName".equals(lastSort)){
+		else if(orderBy!=null || SORT_BY_COLUMN.equals(lastSort)){
 			orderBy = orderBy!=null?orderBy:
-						(String) request.getSession().getAttribute("lastOrderBy");
+						(String) request.getSession().getAttribute(LAST_ORDER_BY);
 			
-			request.getSession().setAttribute("orderBy", orderBy);
-			request.getSession().setAttribute("lastOrderBy", orderBy);
+			request.getSession().setAttribute(ORDER_BY, orderBy);
+			request.getSession().setAttribute(LAST_ORDER_BY, orderBy);
 			
 			Boolean descSort = orderBy.contains("desc")?true:false;
 
@@ -73,14 +70,14 @@ public class TestListingCommand implements Command{
 				orderBy+= "_" + (language!=null?language:DEFAULT_LANGUAGE);
 			}
 			
-			request.getSession().setAttribute("lastSort", "byColumnName");
+			request.getSession().setAttribute(LAST_SORT, SORT_BY_COLUMN);
 			
 			tests = testService.findTestsByPageSorted((page-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE, descSort,  orderBy);
 		}
 		else {
 			tests = testService.findTestsByPageSorted((page-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE, false, SELECT_N_TESTS_BY_SUBJECT);	
-			request.getSession().setAttribute("selectedSubject", selectedSubject);
-			request.getSession().setAttribute("lastSort", "");
+			request.getSession().setAttribute(SELECTED_SUBJECT, selectedSubject);
+			request.getSession().setAttribute(LAST_SORT, "");
 		}
 			
         int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / RECORDS_PER_PAGE);
@@ -90,11 +87,11 @@ public class TestListingCommand implements Command{
         request.getSession().setAttribute("currentPage", page);
         request.getSession().setAttribute("subjects", subjects);
         
-        User user = (User) request.getSession().getAttribute("User");
+        User user = (User) request.getSession().getAttribute(USER);
         
-        if("ADMIN".equals(user.getRole().toString())) {
-        	return "redirect:"+APP_NAME+"/account/admin/adminbasis.jsp";
+        if(ADMIN.equalsIgnoreCase(user.getRole().toString())) {
+        	return REDIRECT+APP_NAME+ADMIN_PAGE_PATH;
         }
-        return "redirect:"+APP_NAME+"/account/student/studentbasis.jsp";
+        return REDIRECT+APP_NAME+STUDENT_PAGE_PATH;
     }	
 }

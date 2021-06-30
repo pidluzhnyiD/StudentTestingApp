@@ -1,8 +1,6 @@
 package ua.training.controller.command;
 
-import java.util.Locale;
 import java.util.Optional;
-import java.util.ResourceBundle;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

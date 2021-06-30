@@ -16,7 +16,7 @@ public class CalculateResultCommand implements Command{
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
 		List<String[]>answers = new ArrayList<String[]>();
-		Test test = (Test) request.getSession().getAttribute("selectedTest");
+		Test test = (Test) request.getSession().getAttribute(SELECTED_TEST);
 		for(int i=1;i<=test.getQuestionsCount();i++) {
 			answers.add(request.getParameterValues("question"+i));
 		}

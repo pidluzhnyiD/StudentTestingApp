@@ -20,7 +20,7 @@ public class AddQuestionCommand implements Command{
 	private static final Logger logger = LogManager.getLogger(AddQuestionCommand.class);
 	@Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-		Test test = (Test) request.getSession().getAttribute("selectedTest");		
+		Test test = (Test) request.getSession().getAttribute(SELECTED_TEST);		
         String englishDescription = request.getParameter("englishDescription");
         
         List<Boolean>answers = new ArrayList<Boolean>();

@@ -18,14 +18,14 @@ public class StartTestCommand implements Command{
 		
 		int id = Integer.parseInt(request.getParameter("testId"));
 		String language = request.getSession().getAttribute(LANGUAGE)==null?
-				"en":request.getSession().getAttribute(LANGUAGE).toString();
+				DEFAULT_LANGUAGE:request.getSession().getAttribute(LANGUAGE).toString();
 		
 		Test test = testService.getTestById(id).get();		
 		test.setQuestions(questionService.getQuestionsByTestId(id, language));
 				
-        request.getSession().setAttribute("selectedTest", test);
+        request.getSession().setAttribute(SELECTED_TEST, test);
         request.getSession().setAttribute("startTime", System.currentTimeMillis());
     	testService.increaseRequestsNumber(test);
-        return "redirect:account/student/test.jsp";
+        return REDIRECT+TEST_PATH;
 	}
 }
