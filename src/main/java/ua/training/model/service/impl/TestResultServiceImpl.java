@@ -35,15 +35,16 @@ public class TestResultServiceImpl implements TestResultService{
 			List<Boolean>correctAnswers = questions.get(i).getCorrectAnswers();
 			int correctAnswersCount=0;
 			int userAnswersCount=0;
-			for(int j=0; j<correctAnswers.size();j++) {				
-				if(correctAnswers.get(j)) {
-					correctAnswersCount++;
-					if(userAnswers.get(i)!=null  && Arrays.asList(userAnswers.get(i)).contains(String.valueOf(j))){
-						userAnswersCount++;
+			for(int j=0; j<correctAnswers.size();j++) {		
+				if(userAnswers.get(i)!=null  && Arrays.asList(userAnswers.get(i)).contains(String.valueOf(j))){
+					userAnswersCount++;
+					if(correctAnswers.get(j)) {		
+						correctAnswersCount++;						
 					}
 				}
+				
 			}
-			if(correctAnswersCount==userAnswersCount) {
+			if(correctAnswersCount==userAnswersCount) {					
 				score++;
 			}
 		}
