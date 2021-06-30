@@ -33,29 +33,32 @@ public class TestListingCommand implements Command{
         
         String lastSort = null;
         
-        if(request.getParameter("selectedSubject")==null&&request.getParameter("orderBy")==null) {
+        String selectedSubject = request.getParameter("selectedSubject");
+        String orderBy = request.getParameter("orderBy");
+        String language = request.getParameter("language");
+        
+        if(selectedSubject==null&&orderBy==null) {
         	lastSort = (String) request.getSession().getAttribute("lastSort");
         }
         
-		if(request.getParameter("selectedSubject")!=null&&!"0".equals(request.getParameter("selectedSubject"))
+		if(selectedSubject!=null&&!"0".equals(selectedSubject)
 				||"bySubject".equals(lastSort)) {
 			
-			int selectedSubject = request.getParameter("selectedSubject")!=null?
-					Integer.parseInt(request.getParameter("selectedSubject")):
+			int subjectId = selectedSubject!=null?
+					Integer.parseInt(selectedSubject):
 						(int) request.getSession().getAttribute("lastSelectedSubject");
 			
 			request.getSession().setAttribute("selectedSubject", selectedSubject);
 			request.getSession().setAttribute("lastSort", "bySubject");
 			request.getSession().setAttribute("lastSelectedSubject", selectedSubject);
 			
-			noOfRecords = testService.getTestsCountBySubjectId(selectedSubject);
+			noOfRecords = testService.getTestsCountBySubjectId(subjectId);
 						
-			tests = testService.findTestsByPageAndSubjectId(selectedSubject,(page-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE);
+			tests = testService.findTestsByPageAndSubjectId(subjectId,(page-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE);
 		
 		}
-		else if(request.getParameter("orderBy")!=null || "byColumnName".equals(lastSort)){
-			String orderBy = request.getParameter("orderBy")!=null?
-					request.getParameter("orderBy"):
+		else if(orderBy!=null || "byColumnName".equals(lastSort)){
+			orderBy = orderBy!=null?orderBy:
 						(String) request.getSession().getAttribute("lastOrderBy");
 			
 			request.getSession().setAttribute("orderBy", orderBy);
@@ -66,10 +69,8 @@ public class TestListingCommand implements Command{
 			orderBy = orderBy.replaceAll("_desc", "");
 					
 			if(!orderBy.contains("requests")) {
-				System.out.println(orderBy);
 				orderBy+="_";
-				orderBy+=request.getParameter("language")!=null?request.getParameter("language"):DEFAULT_LANGUAGE;
-				System.out.println(orderBy);
+				orderBy+= "_" + (language!=null?language:DEFAULT_LANGUAGE);
 			}
 			
 			request.getSession().setAttribute("lastSort", "byColumnName");
@@ -78,7 +79,7 @@ public class TestListingCommand implements Command{
 		}
 		else {
 			tests = testService.findTestsByPageSorted((page-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE, false, SELECT_N_TESTS_BY_SUBJECT);	
-			request.getSession().setAttribute("selectedSubject", request.getParameter("selectedSubject"));
+			request.getSession().setAttribute("selectedSubject", selectedSubject);
 			request.getSession().setAttribute("lastSort", "");
 		}
 			

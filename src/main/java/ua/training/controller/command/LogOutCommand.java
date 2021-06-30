@@ -7,22 +7,22 @@ import java.util.HashSet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import static ua.training.constants.Constants.APP_NAME;
+import static ua.training.constants.Constants.*;
 
 public class LogOutCommand implements Command{
 	@Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {       
         HashSet<String> loggedUsers = (HashSet<String>) request.getSession()
-        		.getServletContext().getAttribute("loggedUsers");
+        		.getServletContext().getAttribute(LOGGED_USERS);
 
-        User currentUser = (User) request.getSession().getAttribute("User");
+        User currentUser = (User) request.getSession().getAttribute(USER);
         
         loggedUsers.remove(currentUser.getLogin());
         request.getSession().getServletContext()
-                .setAttribute("loggedUsers", loggedUsers);
+                .setAttribute(LOGGED_USERS, loggedUsers);
         
         request.getSession().invalidate();
         
-        return "redirect:"+APP_NAME+"/index.jsp";
+        return REDIRECT+APP_NAME+"/index.jsp";
     }
 }

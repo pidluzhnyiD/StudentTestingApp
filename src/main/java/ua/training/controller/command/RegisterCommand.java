@@ -12,26 +12,22 @@ import ua.training.model.entity.User;
 import ua.training.model.service.ServiceFactory;
 import ua.training.model.service.UserService;
 
+import static ua.training.constants.Constants.*;
+
 public class RegisterCommand  implements Command{
 	@Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        String userName = request.getParameter("login");
-        String password = request.getParameter("password");
-        String firstName = request.getParameter("firstName");
+        String userName = request.getParameter(LOGIN);
+        String password = request.getParameter(PASSWORD);
+        String firstName = request.getParameter(FIRSTNAME);
         
         UserService userService = ServiceFactory.getInstance().createUserService();
         Optional<User>user = userService.getUserByLogin(userName);
         
         if(user.isPresent()) {
-        	Locale locale;
-        	if(request.getSession().getAttribute("language")==null||request.getSession().getAttribute("language")=="en") {
-        		locale = new Locale("en");       		
-        	}
-        	else {
-        		locale = new Locale("ru");  
-        	}
-        	ResourceBundle message = ResourceBundle.getBundle("resources", locale);
-    		request.setAttribute("errorMessage", message.getString("username.taken"));
+        	String message = CommandUtility.getErrorMessage
+        			(request.getSession().getAttribute(LANGUAGE).toString(), "username.taken");
+    		request.setAttribute(ERROR_MESSAGE, message);
         	return "/register.jsp";
         }
         
@@ -39,7 +35,7 @@ public class RegisterCommand  implements Command{
         userService.addNewUser(newUser);
         
         HttpSession session = request.getSession(true);
-        session.setAttribute("User", newUser);
+        session.setAttribute(USER, newUser);
         
         CommandUtility.setUserRole(request, Role.STUDENT, userName);
         return new TestListingCommand().execute(request, response);     

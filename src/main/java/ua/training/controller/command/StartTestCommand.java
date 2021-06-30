@@ -7,6 +7,8 @@ import ua.training.model.service.QuestionService;
 import ua.training.model.service.ServiceFactory;
 import ua.training.model.service.TestService;
 
+import static ua.training.constants.Constants.*;
+
 public class StartTestCommand implements Command{
 
 	@Override
@@ -15,8 +17,8 @@ public class StartTestCommand implements Command{
 		QuestionService questionService = ServiceFactory.getInstance().createQuestionService();
 		
 		int id = Integer.parseInt(request.getParameter("testId"));
-		String language = request.getSession().getAttribute("language")==null?
-				"en":request.getSession().getAttribute("language").toString();
+		String language = request.getSession().getAttribute(LANGUAGE)==null?
+				"en":request.getSession().getAttribute(LANGUAGE).toString();
 		
 		Test test = testService.getTestById(id).get();		
 		test.setQuestions(questionService.getQuestionsByTestId(id, language));

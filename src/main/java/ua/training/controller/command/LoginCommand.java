@@ -13,26 +13,21 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import static ua.training.constants.Constants.*;
+
 public class LoginCommand implements Command{
 	
 	@Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        String userName = request.getParameter("login");
-        String password = request.getParameter("password");
+        String userName = request.getParameter(LOGIN);
+        String password = request.getParameter(PASSWORD);
         
         UserService userService = ServiceFactory.getInstance().createUserService();
         Optional<User>user = userService.getUserByLogin(userName);
         
-        if(!user.isPresent()||!userService.checkIfInputDataIsAccurate(userName, password)) {
-        	Locale locale;
-        	if(request.getSession().getAttribute("language")==null||request.getSession().getAttribute("language")=="en") {
-        		locale = new Locale("en");       		
-        	}
-        	else {
-        		locale = new Locale("ru");  
-        	}
-        	ResourceBundle message = ResourceBundle.getBundle("resources", locale);
-    		request.setAttribute("errorMessage", message.getString("error.unknown.login"));
+        if(!user.isPresent()||!userService.checkIfInputDataIsAccurate(userName, password)) {     	
+        	String message = CommandUtility.getErrorMessage(request.getSession().getAttribute(LANGUAGE).toString(), "error.unknown.login");
+    		request.setAttribute(ERROR_MESSAGE, message);
         	return "/index.jsp";
         }
 
@@ -43,7 +38,7 @@ public class LoginCommand implements Command{
         String role = user.get().getRole().toString().toLowerCase();
         
         HttpSession session = request.getSession(true);
-        session.setAttribute("User", user.get());
+        session.setAttribute(USER, user.get());
         
         if (role.equals("admin")){
             CommandUtility.setUserRole(request, Role.ADMIN, userName);

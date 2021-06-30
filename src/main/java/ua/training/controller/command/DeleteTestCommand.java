@@ -5,6 +5,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import ua.training.model.service.ServiceFactory;
 import ua.training.model.service.TestService;
 
+import static ua.training.constants.Constants.*;
+
 public class DeleteTestCommand implements Command{
 	@Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

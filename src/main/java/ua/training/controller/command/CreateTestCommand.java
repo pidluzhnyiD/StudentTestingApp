@@ -1,7 +1,5 @@
 package ua.training.controller.command;
 
-import static ua.training.constants.Constants.APP_NAME;
-
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -9,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ua.training.model.service.ServiceFactory;
 import ua.training.model.service.TestService;
+
+import static ua.training.constants.Constants.*;
 
 public class CreateTestCommand implements Command{
 	@Override
@@ -23,15 +23,16 @@ public class CreateTestCommand implements Command{
         
         if(!testService.createTest(subject, englishName, russianName, duration, difficulty)){
         	Locale locale;
-        	if(request.getSession().getAttribute("language")==null||request.getSession().getAttribute("language")=="en") {
-        		locale = new Locale("en");       		
+        	if(request.getSession().getAttribute(LANGUAGE)==null||
+        			request.getSession().getAttribute(LANGUAGE)==ENGLISH_LANGUAGE) {
+        		locale = new Locale(DEFAULT_LANGUAGE);       		
         	}
         	else {
-        		locale = new Locale("ru");  
+        		locale = new Locale(RUSSIAN_LANGUAGE);  
         	}
-        	ResourceBundle message = ResourceBundle.getBundle("resources", locale);
+        	ResourceBundle message = ResourceBundle.getBundle(RESOURCES, locale);
     		request.setAttribute("errorMessage", message.getString("error.test.not.created"));
-    		String page = request.getHeader("Referer");
+    		String page = request.getHeader(REFERER);
             return page.substring(page.indexOf(APP_NAME));
         }   
         return new TestListingCommand().execute(request, response);
