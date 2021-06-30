@@ -10,8 +10,9 @@ import ua.training.model.entity.User;
 import ua.training.model.service.ServiceFactory;
 import ua.training.model.service.TestResultService;
 
+import static ua.training.constants.Constants.*;
+
 public class CalculateResultCommand implements Command{
-	private final double PERCENTAGE = 100.0;
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
 		List<String[]>answers = new ArrayList<String[]>();
@@ -24,7 +25,7 @@ public class CalculateResultCommand implements Command{
 		
 		double result = Math.round(testResultService.calculateResultPercentage(test, answers)*PERCENTAGE)/ PERCENTAGE;
 		
-		User user = (User) request.getSession().getAttribute("User");
+		User user = (User) request.getSession().getAttribute(USER);
 
 		long startTimeMillis = (long) request.getSession().getAttribute("startTime");
 		

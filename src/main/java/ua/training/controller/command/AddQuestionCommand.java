@@ -1,7 +1,5 @@
 package ua.training.controller.command;
 
-import static ua.training.constants.Constants.DEFAULT_NUMBER_OF_OPTIONS;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import ua.training.model.entity.Test;
 import ua.training.model.service.QuestionService;
 import ua.training.model.service.ServiceFactory;
+
+import static ua.training.constants.Constants.*;
 
 public class AddQuestionCommand implements Command{
 	private static final Logger logger = LogManager.getLogger(AddQuestionCommand.class);
